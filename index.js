@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 app.get('/', function (req, res) {
-    res.send('{ "response": "CICD DEPLOYMENT" }');
+    res.send('{ "response": "CICD k8s DEPLOYMENT" }');
 });
 
 app.get('/will', function (req, res) {
