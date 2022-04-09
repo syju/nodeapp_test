@@ -1,21 +1,41 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodeapp-deployment
-  labels:
-    app: nodeapp
+  name: knote
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nodeapp
+      app: knote
+      tier: frontend
   template:
     metadata:
       labels:
-        app: nodeapp
+        app: knote
+        tier: frontend
     spec:
       containers:
-      - name: nodeserver
-        image: matt96/nodeapp:latest
-        ports:
-        - containerPort: 3000
+        - name: app
+          image: matt96/nodeapp:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo:27017/dev
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knote
+spec:
+  selector:
+    app: knote
+    tier: frontend
+
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30000
+  type: LoadBalancer
